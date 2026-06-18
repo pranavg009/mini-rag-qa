@@ -1,6 +1,8 @@
-# 🔎 Mini-RAG Document Q&A Bot
+# 🔎 The Reading Room — Mini-RAG Document Q&A Bot
 
-A production-quality Streamlit app that lets you upload documents (PDF, TXT, DOCX), index them locally with semantic embeddings, and ask questions — answered strictly from your document content via the Groq LLM API.
+**Live app:** [mini-rag-project.streamlit.app](https://mini-rag-project.streamlit.app)
+
+A Streamlit app that lets you file documents (PDF, TXT, DOCX), index them locally with semantic embeddings, and pose questions — answered strictly from your document content via the Groq LLM API, with every reply measured for confidence and traced back to its source.
 
 ---
 
@@ -8,13 +10,19 @@ A production-quality Streamlit app that lets you upload documents (PDF, TXT, DOC
 
 - **Local RAG pipeline** — no LangChain or LlamaIndex; built from scratch with `sentence-transformers` + FAISS
 - **Grounded answers only** — the model is instructed to say "I don't know" rather than hallucinate
-- **Confidence scoring** — composite score from retrieval similarity + grounding signal
+- **Confidence dial** — a composite score from retrieval similarity and a grounding signal, rendered as a measured reading rather than a generic badge
 - **Full chat history** — downloadable plain-text transcript
 - **Clean error handling** — no raw tracebacks ever shown to the user
 
 ---
 
-## Setup
+## Try it now
+
+The hosted version is live at **[mini-rag-project.streamlit.app](https://mini-rag-project.streamlit.app)** — no setup required. File a PDF, TXT, or DOCX from the sidebar, click **Catalog Documents**, then ask a question.
+
+---
+
+## Setup (local)
 
 ### 1. Clone and install
 
@@ -61,14 +69,21 @@ Uploaded files are extracted to plain text (pdfplumber for PDF, python-docx for 
 All chunks are encoded with `all-MiniLM-L6-v2` (a fast, high-quality local sentence embedding model) into L2-normalised vectors. These are stored in a FAISS `IndexFlatIP` (or a NumPy fallback) so dot-product search equals cosine similarity.
 
 ### 3. Retrieval
-The user's question is embedded with the same model. The top-K most similar chunks are retrieved via the index.
+The question is embedded with the same model. The top-K most similar chunks are retrieved via the index, where K auto-scales with how many chunks are on file.
 
 ### 4. Grounded generation
-Retrieved chunks are sent as numbered context to `llama-3.3-70b-versatile` on Groq with a strict system prompt: answer only from the provided chunks, cite them, and append `GROUNDED: YES` or `GROUNDED: NO`. The app strips this marker and uses it for scoring.
+Retrieved chunks are sent as numbered context to `llama-3.3-70b-versatile` on Groq with a strict system prompt: answer only from the provided chunks, never fabricate, and append `GROUNDED: YES` or `GROUNDED: NO`. The app strips this marker and uses it for scoring.
 
 ### 5. Confidence score
-`confidence = 0.6 × avg_chunk_similarity + 0.4 × grounding_flag`  
-Displayed as a colour-coded badge: 🟢 ≥75% · 🟠 50–74% · 🔴 <50%.
+The raw cosine similarity from MiniLM clusters tightly (roughly 0.2–0.65 even for strong matches), so it's rescaled to a fuller 0–1 range before blending:
+
+```
+confidence = 0.45 × rescaled_avg_similarity
+           + 0.20 × rescaled_top_chunk_similarity
+           + 0.35 × grounding_flag
+```
+
+Displayed as a tick-gauge dial rather than a flat badge: 🟢 ≥68% high confidence · 🟠 42–67% medium · 🔴 <42% low.
 
 ---
 
@@ -76,15 +91,15 @@ Displayed as a colour-coded badge: 🟢 ≥75% · 🟠 50–74% · 🔴 <50%.
 
 ```
 mini-rag-qa/
-├── app.py               # Streamlit UI
-├── rag_engine.py        # Embedding, indexing, retrieval, confidence
-├── document_loader.py   # Text extraction + chunking
-├── llm_client.py        # Groq API client + answer generation
-├── utils.py             # Badge formatter, transcript export, timer
-├── config.py            # All constants (no magic numbers elsewhere)
+├── app.py               # Streamlit UI (Reading Room design)
+├── rag_engine.py         # Embedding, indexing, retrieval, confidence
+├── document_loader.py    # Text extraction + chunking
+├── llm_client.py          # Groq API client + answer generation
+├── utils.py               # Badge formatter, transcript export, timer
+├── config.py              # All constants (no magic numbers elsewhere)
 ├── requirements.txt
 ├── .streamlit/
-│   └── config.toml      # Theme (indigo accent, auto light/dark)
+│   └── config.toml        # Theme (parchment & sepia, archival palette)
 ├── .env.example
 └── README.md
 ```
