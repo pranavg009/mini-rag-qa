@@ -371,7 +371,7 @@ def _render_sidebar() -> tuple[list, int]:
 
         # ── Retrieval settings ─────────────────────────────────────────────
         st.subheader("Retrieval Settings")
-       n = len(st.session_state.get("chunks", []))
+        n = len(st.session_state.get("chunks", []))
         if n == 0:
             top_k = DEFAULT_TOP_K
         elif n <= 5:
@@ -382,7 +382,7 @@ def _render_sidebar() -> tuple[list, int]:
             top_k = max(5, n // 5)
         else:
             top_k = min(MAX_TOP_K, max(7, n // 8))
-        st.caption(f"🎯 Auto Top-K: **{top_k}** / {n} chunks")
+        st.caption(f"🎯 Auto Top-K: **{top_k}** / {max(n,1)} chunks")
 
         st.divider()
 
