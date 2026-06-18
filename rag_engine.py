@@ -198,25 +198,31 @@ def retrieve(
 
 
 def compute_confidence(retrieved: list[dict], grounded: bool) -> float:
-    """Compute a composite confidence score for the generated answer.
+    """Compute confidence with rescaled similarity scores.
 
-    Formula:
-        confidence = 0.6 * avg(similarity of retrieved chunks)
-                   + 0.4 * (1.0 if grounded else 0.0)
-
-    The score is clamped to [0.0, 1.0].
-
-    Args:
-        retrieved: List of retrieved chunk dicts with a "similarity" key.
-        grounded: Whether the LLM reported GROUNDED: YES.
-
-    Returns:
-        A float in [0.0, 1.0].
+    Raw cosine similarity from MiniLM clusters between 0.2-0.65 even for
+    strong matches. We rescale to the realistic [0.15, 0.75] range so the
+    final score uses the full 0-1 spectrum meaningfully.
     """
     if not retrieved:
         return 0.0
 
-    avg_sim = float(np.mean([c.get("similarity", 0.0) for c in retrieved]))
+    SIM_MIN = 0.15   # typical floor for unrelated content
+    SIM_MAX = 0.75   # realistic ceiling for strong matches
+
+    raw_sims = [c.get("similarity", 0.0) for c in retrieved]
+    avg_sim = float(np.mean(raw_sims))
+    top_sim = float(np.max(raw_sims))
+
+    # Rescale average similarity to [0, 1]
+    rescaled = (avg_sim - SIM_MIN) / (SIM_MAX - SIM_MIN)
+    rescaled = float(np.clip(rescaled, 0.0, 1.0))
+
+    # Boost if top chunk is very strong
+    top_rescaled = (top_sim - SIM_MIN) / (SIM_MAX - SIM_MIN)
+    top_rescaled = float(np.clip(top_rescaled, 0.0, 1.0))
+
+    # Blend average + top chunk + grounding
     grounding_bonus = 1.0 if grounded else 0.0
-    raw = 0.6 * avg_sim + 0.4 * grounding_bonus
+    raw = 0.45 * rescaled + 0.20 * top_rescaled + 0.35 * grounding_bonus
     return float(np.clip(raw, 0.0, 1.0))
