@@ -517,9 +517,28 @@ def _run_qa(query: str, top_k: int) -> None:
     badge_label, badge_color = format_confidence_badge(confidence)
 
     # ── Render answer ──────────────────────────────────────────────────────
-    card_class = "answer-card" if grounded else "answer-card ungrounded"
-    st.markdown(f'<div class="{card_class}">{answer}</div>', unsafe_allow_html=True)
+    # Build unique source filenames used
+    used_sources = list(dict.fromkeys([c.get("source", "unknown") for c in retrieved]))
+    sources_html = "".join(
+        f'<span style="display:inline-flex;align-items:center;gap:4px;'
+        f'background:rgba(99,102,241,0.12);border:1px solid rgba(99,102,241,0.25);'
+        f'border-radius:999px;padding:2px 10px;font-size:0.76rem;font-weight:500;'
+        f'margin-right:6px;">📄 {s}</span>'
+        for s in used_sources
+    )
 
+    card_class = "answer-card" if grounded else "answer-card ungrounded"
+    st.markdown(
+        f'<div class="{card_class}">'
+        f'{answer}'
+        f'<div style="margin-top:1rem;padding-top:0.75rem;'
+        f'border-top:1px solid rgba(255,255,255,0.08);">'
+        f'<span style="font-size:0.74rem;opacity:0.5;'
+        f'text-transform:uppercase;letter-spacing:0.05em;font-weight:600;">'
+        f'Sources &nbsp;</span>{sources_html}</div>'
+        f'</div>',
+        unsafe_allow_html=True
+    )
     # Badge + timing row
     col_badge, col_time, _ = st.columns([2, 2, 4])
     with col_badge:
