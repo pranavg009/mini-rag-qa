@@ -118,10 +118,43 @@ st.markdown(
         margin-top: 0.5rem;
     }
 
-    /* ── Accent colour override for Streamlit buttons ────────────────────── */
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
     .stButton > button:first-child {
         border-radius: 8px;
+        font-weight: 600;
+        transition: opacity 0.2s;
     }
+    .stButton > button:hover { opacity: 0.85; }
+
+    /* ── Sidebar polish ──────────────────────────────────────────────────── */
+    section[data-testid="stSidebar"] {
+        border-right: 1px solid rgba(255,255,255,0.08);
+        padding-top: 1rem;
+    }
+
+    /* ── Page title ──────────────────────────────────────────────────────── */
+    h1 { letter-spacing: -0.5px; font-weight: 700 !important; }
+
+    /* ── Chat input ──────────────────────────────────────────────────────── */
+    [data-testid="stChatInput"] textarea {
+        border-radius: 12px !important;
+        border: 1.5px solid #6366f1 !important;
+        font-size: 1rem !important;
+    }
+
+    /* ── Info/success/warning boxes ──────────────────────────────────────── */
+    [data-testid="stAlert"] {
+        border-radius: 10px !important;
+    }
+
+    /* ── Expander ────────────────────────────────────────────────────────── */
+    [data-testid="stExpander"] {
+        border-radius: 10px !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+    }
+
+    /* ── Divider ─────────────────────────────────────────────────────────── */
+    hr { opacity: 0.15 !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -187,13 +220,9 @@ def _render_sidebar() -> tuple[list, int]:
 
         # ── Retrieval settings ─────────────────────────────────────────────
         st.subheader("Retrieval Settings")
-        top_k = st.slider(
-            "Top-K chunks to retrieve",
-            min_value=MIN_TOP_K,
-            max_value=MAX_TOP_K,
-            value=DEFAULT_TOP_K,
-            help="More chunks give richer context but may add noise.",
-        )
+        n = len(st.session_state.get("chunks", []))
+        top_k = min(max(2, n // 10), MAX_TOP_K) if n > 0 else DEFAULT_TOP_K
+        st.caption(f"🎯 Auto Top-K: **{top_k}** chunks (scales with document size)")
 
         st.divider()
 
@@ -424,9 +453,12 @@ def main() -> None:
 
     # ── Header ─────────────────────────────────────────────────────────────
     st.title("🔎 Mini-RAG Document Q&A Bot")
-    st.caption(
-        "Upload documents, process them, and ask questions — "
-        "answers are grounded strictly in the uploaded content."
+    st.markdown(
+        "<p style='font-size:1.05rem; opacity:0.75; margin-top:-0.5rem;'>"
+        "Upload PDFs, TXT, or DOCX files · Ask questions · Get answers grounded "
+        "strictly in your documents · Confidence-scored every time."
+        "</p>",
+        unsafe_allow_html=True,
     )
 
     # ── Trigger document processing ────────────────────────────────────────
