@@ -40,7 +40,7 @@ def format_confidence_badge(confidence: float) -> tuple[str, str]:
         tier = "Low Confidence"
         color = "red"
 
-    label = f"{pct}% — {tier}"
+    label = tier
     return label, color
 
 
