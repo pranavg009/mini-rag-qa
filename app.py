@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 # ── Page config (must be first Streamlit call) ─────────────────────────────
 st.set_page_config(
-    page_title="Mini-RAG Q&A",
+    page_title="Forensis -- Mini_RAG Q&A",
     page_icon="🔎",
     layout="wide",
 )
@@ -353,7 +353,7 @@ _init_state()
 def _render_sidebar() -> tuple[list, int]:
     """Render the sidebar and return (uploaded_files, top_k)."""
     with st.sidebar:
-        st.title("🔎 Mini-RAG Q&A")
+        st.title("🔎 Forensis -- Mini_RAG Q&A")
         st.caption("Upload documents, then ask questions grounded in their content.")
         st.divider()
 
@@ -631,7 +631,7 @@ def main() -> None:
     uploaded_files, top_k, process_btn = _render_sidebar()
 
     # ── Header ─────────────────────────────────────────────────────────────
-    st.title("🔎 Mini-RAG Document Q&A Bot")
+    st.title("🔎 Forensis -- Mini_RAG Document Q&A Bot")
     st.markdown(
         "<p style='font-size:1.05rem; opacity:0.75; margin-top:-0.5rem;'>"
         "Upload PDFs, TXT, or DOCX files · Ask questions · Get answers grounded "
