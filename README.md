@@ -1,4 +1,4 @@
-# 🔎 The Reading Room — Mini-RAG Document Q&A Bot
+# 🔎  Forensis — Mini-RAG Document Q&A Bot
 
 **Live app:** [mini-rag-project.streamlit.app](https://mini-rag-project.streamlit.app)
 
