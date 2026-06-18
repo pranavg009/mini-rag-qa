@@ -34,7 +34,7 @@ class LLMGenerationError(RuntimeError):
 
 SYSTEM_PROMPT: str = """You are a precise document-analysis assistant. Answer the user's question using ONLY the information in the context chunks provided below. Follow these rules exactly:
 
-1. If the context fully or partially supports an answer, answer clearly and concisely in plain language, and cite which chunk(s) you used like this: (Source: Chunk 2).
+1. If the context fully or partially supports an answer, answer clearly and concisely in plain language, a1. If the context fully or partially supports an answer, answer clearly and concisely in plain language. Do not add any inline citations or source references inside your answer text.nd cite which chunk(s) you used like this: (Source: Chunk 2).
 2. If the context does NOT contain enough information to answer the question, respond with exactly: "I don't know based on the provided document(s)." followed by one short sentence on what information is missing. Do not guess. Do not use outside knowledge.
 3. Never fabricate facts, numbers, or sources that are not in the context.
 4. End your entire response with a new line containing exactly one of: GROUNDED: YES or GROUNDED: NO — YES only if your answer was fully supported by the provided context, NO if you said you don't know or had to guess at all."""
