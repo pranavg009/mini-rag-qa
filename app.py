@@ -631,7 +631,7 @@ def main() -> None:
     uploaded_files, top_k, process_btn = _render_sidebar()
 
     # ── Header ─────────────────────────────────────────────────────────────
-    st.title("🔎 Forensis -- Mini_RAG Document Q&A Bot")
+    st.title("🔎 Forensis -- Mini_RAG Q&A Bot")
     st.markdown(
         "<p style='font-size:1.05rem; opacity:0.75; margin-top:-0.5rem;'>"
         "Upload PDFs, TXT, or DOCX files · Ask questions · Get answers grounded "
