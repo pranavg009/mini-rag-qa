@@ -47,118 +47,269 @@ st.set_page_config(
 )
 
 # ── Custom CSS ─────────────────────────────────────────────────────────────
-st.markdown(
-    """
-    <style>
-    /* ── Font stack ────────────────────────────────────────────────────── */
-    html, body, [class*="css"] {
-        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-    }
+st.markdown("""
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-    /* ── Answer card ────────────────────────────────────────────────────── */
-    .answer-card {
-        border-radius: 12px;
-        padding: 1.25rem 1.5rem;
-        border-left: 4px solid #6366f1;
-        background: var(--background-secondary, rgba(99,102,241,0.06));
-        margin-bottom: 0.75rem;
-        line-height: 1.7;
-    }
+/* ── Base ─────────────────────────────────────────────────────────────── */
+html, body, [class*="css"] {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif !important;
+}
 
-    /* ── Ungrounded answer — de-emphasised ────────────────────────────── */
-    .answer-card.ungrounded {
-        border-left-color: #f59e0b;
-        background: var(--background-secondary, rgba(245,158,11,0.06));
-        opacity: 0.88;
-    }
+/* ── Sidebar ──────────────────────────────────────────────────────────── */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0d0d14 0%, #111118 100%) !important;
+    border-right: 1px solid rgba(99,102,241,0.2) !important;
+}
+section[data-testid="stSidebar"] .block-container {
+    padding-top: 2rem;
+}
 
-    /* ── Confidence badge ───────────────────────────────────────────────── */
-    .badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 999px;
-        font-size: 0.78rem;
-        font-weight: 600;
-        letter-spacing: 0.03em;
-    }
-    .badge-green  { background: rgba(34,197,94,0.18);  color: #15803d; }
-    .badge-orange { background: rgba(245,158,11,0.18); color: #b45309; }
-    .badge-red    { background: rgba(239,68,68,0.18);  color: #b91c1c; }
+/* ── Sidebar title accent ─────────────────────────────────────────────── */
+section[data-testid="stSidebar"] h1 {
+    background: linear-gradient(135deg, #6366f1, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+}
 
-    /* ── Source chunk card ──────────────────────────────────────────────── */
-    .source-card {
-        border-radius: 8px;
-        padding: 0.85rem 1rem;
-        background: var(--background-secondary, rgba(100,100,100,0.06));
-        margin-bottom: 0.6rem;
-        font-size: 0.88rem;
-        border: 1px solid rgba(100,100,100,0.12);
-    }
-    .source-meta {
-        font-size: 0.78rem;
-        opacity: 0.7;
-        margin-bottom: 0.35rem;
-    }
+/* ── Main area background ─────────────────────────────────────────────── */
+.main .block-container {
+    padding-top: 2rem;
+    max-width: 900px;
+}
 
-    /* ── History entry ──────────────────────────────────────────────────── */
-    .history-entry {
-        border-radius: 10px;
-        padding: 1rem 1.25rem;
-        margin-bottom: 1rem;
-        border: 1px solid rgba(100,100,100,0.12);
-        background: var(--background-secondary, rgba(100,100,100,0.03));
-    }
-    .history-question {
-        font-weight: 600;
-        margin-bottom: 0.4rem;
-    }
-    .history-meta {
-        font-size: 0.76rem;
-        opacity: 0.6;
-        margin-top: 0.5rem;
-    }
+/* ── Page title gradient ──────────────────────────────────────────────── */
+h1 {
+    background: linear-gradient(135deg, #ffffff 0%, #a78bfa 60%, #6366f1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800 !important;
+    font-size: 2.4rem !important;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
 
-    /* ── Buttons ─────────────────────────────────────────────────────────── */
-    .stButton > button:first-child {
-        border-radius: 8px;
-        font-weight: 600;
-        transition: opacity 0.2s;
-    }
-    .stButton > button:hover { opacity: 0.85; }
+/* ── Section headings ─────────────────────────────────────────────────── */
+h2, h3 {
+    font-weight: 600 !important;
+    letter-spacing: -0.3px;
+}
 
-    /* ── Sidebar polish ──────────────────────────────────────────────────── */
-    section[data-testid="stSidebar"] {
-        border-right: 1px solid rgba(255,255,255,0.08);
-        padding-top: 1rem;
-    }
+/* ── Answer card ──────────────────────────────────────────────────────── */
+.answer-card {
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(135deg,
+        rgba(99,102,241,0.08) 0%,
+        rgba(167,139,250,0.05) 100%);
+    border: 1px solid rgba(99,102,241,0.25);
+    border-left: 4px solid #6366f1;
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    font-size: 1rem;
+    box-shadow: 0 4px 24px rgba(99,102,241,0.08);
+    backdrop-filter: blur(8px);
+}
 
-    /* ── Page title ──────────────────────────────────────────────────────── */
-    h1 { letter-spacing: -0.5px; font-weight: 700 !important; }
+/* ── Ungrounded answer ────────────────────────────────────────────────── */
+.answer-card.ungrounded {
+    background: linear-gradient(135deg,
+        rgba(245,158,11,0.08) 0%,
+        rgba(251,191,36,0.04) 100%);
+    border: 1px solid rgba(245,158,11,0.25);
+    border-left: 4px solid #f59e0b;
+    box-shadow: 0 4px 24px rgba(245,158,11,0.08);
+}
 
-    /* ── Chat input ──────────────────────────────────────────────────────── */
-    [data-testid="stChatInput"] textarea {
-        border-radius: 12px !important;
-        border: 1.5px solid #6366f1 !important;
-        font-size: 1rem !important;
-    }
+/* ── Confidence badge ─────────────────────────────────────────────────── */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.35rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+.badge-green {
+    background: rgba(34,197,94,0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34,197,94,0.3);
+    box-shadow: 0 0 12px rgba(34,197,94,0.15);
+}
+.badge-orange {
+    background: rgba(245,158,11,0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245,158,11,0.3);
+    box-shadow: 0 0 12px rgba(245,158,11,0.12);
+}
+.badge-red {
+    background: rgba(239,68,68,0.15);
+    color: #f87171;
+    border: 1px solid rgba(239,68,68,0.3);
+    box-shadow: 0 0 12px rgba(239,68,68,0.12);
+}
 
-    /* ── Info/success/warning boxes ──────────────────────────────────────── */
-    [data-testid="stAlert"] {
-        border-radius: 10px !important;
-    }
+/* ── Metric cards ─────────────────────────────────────────────────────── */
+.metric-row {
+    display: flex;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+.metric-card {
+    flex: 1;
+    border-radius: 14px;
+    padding: 1.1rem 1.4rem;
+    background: linear-gradient(135deg,
+        rgba(99,102,241,0.1) 0%,
+        rgba(99,102,241,0.04) 100%);
+    border: 1px solid rgba(99,102,241,0.2);
+    text-align: center;
+}
+.metric-card .metric-value {
+    font-size: 1.9rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a78bfa, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+}
+.metric-card .metric-label {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-top: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+}
 
-    /* ── Expander ────────────────────────────────────────────────────────── */
-    [data-testid="stExpander"] {
-        border-radius: 10px !important;
-        border: 1px solid rgba(255,255,255,0.08) !important;
-    }
+/* ── Source chunk card ────────────────────────────────────────────────── */
+.source-card {
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 0.75rem;
+    font-size: 0.88rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-left: 3px solid #6366f1;
+    transition: border-color 0.2s;
+    line-height: 1.65;
+}
+.source-card:hover {
+    border-left-color: #a78bfa;
+    background: rgba(99,102,241,0.06);
+}
+.source-meta {
+    font-size: 0.76rem;
+    opacity: 0.55;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
 
-    /* ── Divider ─────────────────────────────────────────────────────────── */
-    hr { opacity: 0.15 !important; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+/* ── History entry ────────────────────────────────────────────────────── */
+.history-entry {
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.2s;
+}
+.history-entry:hover {
+    border-color: rgba(99,102,241,0.25);
+}
+.history-question {
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: #e2e8f0;
+}
+.history-meta {
+    font-size: 0.74rem;
+    opacity: 0.5;
+    margin-top: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* ── Chat input ───────────────────────────────────────────────────────── */
+[data-testid="stChatInput"] {
+    border-radius: 16px !important;
+}
+[data-testid="stChatInput"] textarea {
+    border-radius: 14px !important;
+    border: 1.5px solid rgba(99,102,241,0.4) !important;
+    background: rgba(99,102,241,0.06) !important;
+    font-size: 1rem !important;
+    padding: 0.9rem 1.2rem !important;
+    transition: border-color 0.2s !important;
+}
+[data-testid="stChatInput"] textarea:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15) !important;
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.stButton > button {
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s !important;
+    letter-spacing: 0.01em;
+}
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #6366f1, #7c3aed) !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.3) !important;
+}
+.stButton > button[kind="primary"]:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(99,102,241,0.4) !important;
+}
+
+/* ── Alerts ───────────────────────────────────────────────────────────── */
+[data-testid="stAlert"] {
+    border-radius: 12px !important;
+    border-width: 1px !important;
+}
+
+/* ── Expander ─────────────────────────────────────────────────────────── */
+[data-testid="stExpander"] {
+    border-radius: 12px !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    background: rgba(255,255,255,0.02) !important;
+}
+[data-testid="stExpander"]:hover {
+    border-color: rgba(99,102,241,0.3) !important;
+}
+
+/* ── Slider ───────────────────────────────────────────────────────────── */
+[data-testid="stSlider"] > div > div > div {
+    background: linear-gradient(90deg, #6366f1, #a78bfa) !important;
+}
+
+/* ── Dividers ─────────────────────────────────────────────────────────── */
+hr {
+    border-color: rgba(99,102,241,0.15) !important;
+    margin: 1.5rem 0 !important;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+    background: rgba(99,102,241,0.3);
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(99,102,241,0.5); }
+</style>
+""", unsafe_allow_html=True)
 
 
 # ── Cached resources ───────────────────────────────────────────────────────
@@ -220,9 +371,18 @@ def _render_sidebar() -> tuple[list, int]:
 
         # ── Retrieval settings ─────────────────────────────────────────────
         st.subheader("Retrieval Settings")
-        n = len(st.session_state.get("chunks", []))
-        top_k = min(max(2, n // 10), MAX_TOP_K) if n > 0 else DEFAULT_TOP_K
-        st.caption(f"🎯 Auto Top-K: **{top_k}** chunks (scales with document size)")
+       n = len(st.session_state.get("chunks", []))
+        if n == 0:
+            top_k = DEFAULT_TOP_K
+        elif n <= 5:
+            top_k = n
+        elif n <= 15:
+            top_k = max(3, n // 2)
+        elif n <= 50:
+            top_k = max(5, n // 5)
+        else:
+            top_k = min(MAX_TOP_K, max(7, n // 8))
+        st.caption(f"🎯 Auto Top-K: **{top_k}** / {n} chunks")
 
         st.divider()
 
@@ -469,15 +629,38 @@ def main() -> None:
     if st.session_state["doc_ready"]:
         n_files = len(st.session_state["processed_files"])
         n_chunks = len(st.session_state["chunks"])
-        st.info(
-            f"📚 **{n_files} file(s)** · **{n_chunks} chunks** indexed and ready.",
-            icon="✅",
-        )
+        st.markdown(f"""
+        <div class="metric-row">
+            <div class="metric-card">
+                <div class="metric-value">{n_files}</div>
+                <div class="metric-label">Documents Loaded</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">{n_chunks}</div>
+                <div class="metric-label">Chunks Indexed</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">{top_k}</div>
+                <div class="metric-label">Auto Top-K Active</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     else:
-        st.info(
-            "👆 Upload documents using the sidebar and click **Process Documents** to get started.",
-            icon="ℹ️",
-        )
+        st.markdown("""
+        <div style="
+            border-radius:16px;
+            padding:1.5rem 2rem;
+            background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(167,139,250,0.04));
+            border:1px dashed rgba(99,102,241,0.3);
+            text-align:center;
+            margin:1rem 0;">
+            <div style="font-size:2rem;margin-bottom:0.5rem;">📂</div>
+            <div style="font-weight:600;font-size:1.05rem;">No documents loaded yet</div>
+            <div style="opacity:0.55;font-size:0.88rem;margin-top:0.3rem;">
+                Upload PDF, TXT, or DOCX files from the sidebar and click Process Documents
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.divider()
 
