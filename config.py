@@ -17,8 +17,8 @@ MIN_TOP_K: int = 1
 MAX_TOP_K: int = 10
 
 # ── Confidence thresholds ─────────────────────────────────────────────────
-CONFIDENCE_HIGH_THRESHOLD: float = 0.75
-CONFIDENCE_MEDIUM_THRESHOLD: float = 0.50
+CONFIDENCE_HIGH_THRESHOLD: float = 0.68
+CONFIDENCE_MEDIUM_THRESHOLD: float = 0.42
 
 # ── File handling ─────────────────────────────────────────────────────────
 MAX_FILE_SIZE_MB: int = 25
