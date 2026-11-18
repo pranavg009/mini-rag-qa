@@ -9,7 +9,7 @@ CHUNK_OVERLAP: int = 150       # overlap between consecutive chunks
 
 # ── Models ────────────────────────────────────────────────────────────────
 EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"
-GROQ_MODEL_NAME: str = "llama-3.3-70b-versatile"
+GROQ_MODEL_NAME: str = "openai/gpt-oss-120b"
 
 # ── Retrieval ─────────────────────────────────────────────────────────────
 DEFAULT_TOP_K: int = 4
